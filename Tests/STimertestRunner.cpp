@@ -118,6 +118,28 @@ TEST(SoftwareTimerTests,isShotTimerWorks)
     ASSERT_EQ(callerCounter,1);
 }
 
+TEST(SoftwareTimerTests,isTimerDeactiveted)
+{
+    SoftwareTimerResetAllTimers();
+    SoftwareTimer_t *t1=SoftwareTimerCreate((uint8_t*)"task1",TimerCb,1000,SINGLE_SHOOT_TIMER);
+    SoftwareTimerDeactivate(t1);
+    ASSERT_FALSE(SoftwareTimerGetTimerState(t1));
+}
+
+TEST(SoftwareTimerTests,cannotCallBackAfterDeactivated)
+{
+    SoftwareTimerResetAllTimers();
+    callerCounter=0;
+    SoftwareTimer_t *t1=SoftwareTimerCreate((uint8_t*)"task1",TimerCb,1000,PERIODIC_TIMER);
+    SoftwareTimerDeactivate(t1);
+    for (size_t i = 0; i < 6; i++)
+    {
+        SoftwareTimerTick(200);
+        SoftwareTimerLoop();
+    }
+    ASSERT_EQ(callerCounter,0);    
+}
+
 
 
 
