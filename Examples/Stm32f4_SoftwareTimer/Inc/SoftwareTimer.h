@@ -115,6 +115,4 @@ void SoftwareTimerDeactivate(SoftwareTimer_t *self)
     }
 }
 
-
-
 #endif
